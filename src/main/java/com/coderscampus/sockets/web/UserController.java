@@ -15,18 +15,24 @@ import com.coderscampus.sockets.services.UserService;
 @Controller
 public class UserController {
 
-@Autowired
-private UserService userService;
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/index")
+    public String getIndex() {
+        return "index";
+    }
 
     @GetMapping("/register")
     public String getRegisterPage(ModelMap model) {
-    	model.put("user", new User(null,null,null,null,null,null));
+        model.put("user", new User(null, null, null, null, null, null));
         return "register";
     }
+
     @GetMapping("/login")
     public String getLoginPage(ModelMap model) {
-    	model.put("user", new User());
-    	return "login";
+        model.put("user", new User());
+        return "login";
     }
 
     @GetMapping("/users")
@@ -57,7 +63,7 @@ private UserService userService;
 
     @PostMapping("/users/{userId}/delete")
     public String postDeleteUser(@PathVariable Long userId) {
-            userService.delete(userId);
-            return "redirect:/users";
+        userService.delete(userId);
+        return "redirect:/users";
     }
 }
