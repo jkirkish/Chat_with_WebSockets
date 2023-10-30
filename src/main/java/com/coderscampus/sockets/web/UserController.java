@@ -18,21 +18,21 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/index")
+    @GetMapping("")
     public String getIndex() {
         return "index";
     }
 
     @GetMapping("/register")
     public String getRegisterPage(ModelMap model) {
-        model.put("user", new User(null, null, null, null, null, null));
-        return "register";
+        model.put("user", new User());
+        return "/register";
     }
 
     @GetMapping("/login")
     public String getLoginPage(ModelMap model) {
         model.put("user", new User());
-        return "login";
+        return "/login";
     }
 
     @GetMapping("/users")
@@ -50,9 +50,10 @@ public class UserController {
         return "user";
     }
 
-    @PostMapping()
-    public User createUser(User user) {
-        return userService.createUser(user);
+    @PostMapping("/register")
+    public String createUser(User user) {
+        userService.createUser(user);
+        return "redirect:/register";
     }
 
     @PostMapping("/users/{userId}")
