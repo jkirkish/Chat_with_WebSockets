@@ -18,21 +18,26 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("")
+    @GetMapping("/index")
     public String getIndex() {
+        return "index";
+    }
+
+    @GetMapping("")
+    public String getHomePage() {
         return "index";
     }
 
     @GetMapping("/register")
     public String getRegisterPage(ModelMap model) {
-        model.put("user", new User());
-        return "/register";
+        model.put("user", new User(null, null, null, null, null, null));
+        return "register";
     }
 
     @GetMapping("/login")
     public String getLoginPage(ModelMap model) {
         model.put("user", new User());
-        return "/login";
+        return "login";
     }
 
     @GetMapping("/users")
@@ -58,7 +63,7 @@ public class UserController {
 
     @PostMapping("/users/{userId}")
     public String postOneUser(User user) {
-        userService.saveUser(user);
+        userService.createUser(user);
         return "redirect:/users";
     }
 
@@ -67,4 +72,20 @@ public class UserController {
         userService.delete(userId);
         return "redirect:/users";
     }
+
+    @PostMapping("/login")
+    public String Login(String username, String password) {
+
+        List<User> users = userService.findAll();
+
+        String url = users.stream()
+                .filter(loggingUser -> loggingUser.getUsername().equalsIgnoreCase(username)
+                        && loggingUser.getPassword().equals(password))
+                .findAny()
+                .map(loggingUser -> "redirect:/index")
+                .orElse("redirect:/errorLogin");
+
+        return url;
+    }
+
 }

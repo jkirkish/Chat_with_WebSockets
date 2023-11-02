@@ -13,7 +13,7 @@
     <div class="bg-white p-8 rounded-lg shadow-md w-1/3">
       <h2 class="text-3xl font-semibold mb-4">Login</h2>
       <!-- Add the Home link -->
-      <a href="index.html" class="text-blue-500 hover:underline mb-4 block">Home</a>
+  
       <form th:action="@{/login}" method="post">
         <div class="mb-4">
           <label for="username" class="block text-gray-600">Username:</label>
@@ -48,6 +48,7 @@
           </button>
         </div>
       </form>
+      <a href="/index" class="text-blue-500 hover:underline mb-4 block">Home</a>
     </div>
   </body>
 </html>
