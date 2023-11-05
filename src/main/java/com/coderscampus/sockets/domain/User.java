@@ -31,11 +31,11 @@ public class User {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    private void setUserId(Long id) {
+    public void setUserId(Long id) {
         this.userId = id;
     }
 
