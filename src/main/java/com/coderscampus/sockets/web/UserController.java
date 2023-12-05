@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import com.coderscampus.sockets.domain.User;
 import com.coderscampus.sockets.services.UserService;
 
 @Controller
+@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -57,8 +59,10 @@ public class UserController {
 
     @PostMapping("/register")
     public String createUser(User user) {
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
         userService.createUser(user);
-        return "redirect:/register";
+        return "redirect:/login";
     }
 
     @PostMapping("/users/{userId}")
