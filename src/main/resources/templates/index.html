@@ -1,33 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Registration and Login</title>
-    <!-- Include Tailwind CSS stylesheets -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/main.css" />
+    <title>Chat Application</title>
   </head>
-  <body class="bg-gray-100 font-sans">
-    <div class="container mx-auto p-4">
-      <h1 class="text-4xl text-center mt-8">Welcome to Our Website</h1>
-      <p class="text-lg text-center mt-4">Please select an option:</p>
-      <ul class="flex justify-center space-x-4 mt-8">
-        <li>
-          <a
-            href="/register"
-            class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition duration-300 ease-in-out"
-            >Register</a
-          >
-        </li>
-        <li>
-          <a
-            href="/login"
-            class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded transition duration-300 ease-in-out"
-            >Login</a
-          >
-        </li>
-      </ul>
+  <body>
+    <h2>One to One Chat | Spring boot & Websocket</h2>
+
+    <div class="user-form" id="username-page">
+      <h2>Enter Chatroom</h2>
+      <form id="usernameForm">
+        <label for="nickname">Nickname:</label>
+        <input type="text" id="nickname" name="nickname" required />
+
+        <label for="fullname">Real Name:</label>
+        <input type="text" id="fullname" name="realname" required />
+
+        <button type="submit">Enter Chatroom</button>
+      </form>
     </div>
+
+    <div class="chat-container hidden" id="chat-page">
+      <div class="users-list">
+        <div class="users-list-container">
+          <h2>Online Users</h2>
+          <ul id="connectedUsers"></ul>
+        </div>
+        <div>
+          <p id="connected-user-fullname"></p>
+          <a class="logout" href="javascript:void(0)" id="logout">Logout</a>
+        </div>
+      </div>
+
+      <div class="chat-area">
+        <div class="chat-area" id="chat-messages"></div>
+
+        <form id="messageForm" name="messageForm" class="hidden">
+          <div class="message-input">
+            <input
+              autocomplete="off"
+              type="text"
+              id="message"
+              placeholder="Type your message..."
+            />
+            <button>Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/js/main.js"></script>
   </body>
 </html>

@@ -2,94 +2,42 @@ package com.coderscampus.sockets.web;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
-import com.coderscampus.sockets.domain.User;
-import com.coderscampus.sockets.services.UserService;
+import com.coderscampus.domain.User;
+import com.coderscampus.services.UserService;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
-@CrossOrigin
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService service;
 
-    @GetMapping("/index")
-    public String getIndex() {
-        return "index";
+    @MessageMapping("/user.addUser")
+    @SendTo("/user/topic")
+    public User addUser(
+            @Payload User user) {
+        service.saveUser(user);
+        return user;
     }
 
-    @GetMapping("")
-    public String getHomePage() {
-        return "index";
-    }
-
-    @GetMapping("/register")
-    public String getRegisterPage(ModelMap model) {
-        model.put("user", new User(null, null, null, null, null, null));
-        return "register";
-    }
-
-    @GetMapping("/login")
-    public String getLoginPage(ModelMap model) {
-        model.put("user", new User());
-        return "login";
+    @MessageMapping("/user.disconnectUser")
+    @SendTo("/user/topic")
+    public User disconnect(
+            @Payload User user) {
+        service.disconnect(user);
+        return user;
     }
 
     @GetMapping("/users")
-    public String getUsers(ModelMap model) {
-
-        List<User> users = userService.findAll();
-        model.put("users", users);
-        return "users";
+    public ResponseEntity<List<User>> findConnectedUsers() {
+        return ResponseEntity.ok(service.findConnectedUsers());
     }
-
-    @GetMapping("/users/{id}")
-    public String getOneUser(ModelMap model, @PathVariable Long id) {
-        User user = userService.findById(id);
-        model.put("user", user);
-        return "user";
-    }
-
-    @PostMapping("/register")
-    public String createUser(User user) {
-        User newUser = new User();
-        newUser.setUsername(user.getUsername());
-        userService.createUser(user);
-        return "redirect:/login";
-    }
-
-    @PostMapping("/users/{userId}")
-    public String postOneUser(User user) {
-        userService.createUser(user);
-        return "redirect:/users";
-    }
-
-    @PostMapping("/users/{userId}/delete")
-    public String postDeleteUser(@PathVariable Long userId) {
-        userService.delete(userId);
-        return "redirect:/users";
-    }
-
-    @PostMapping("/login")
-    public String Login(String username, String password) {
-
-        List<User> users = userService.findAll();
-
-        String url = users.stream()
-                .filter(loggingUser -> loggingUser.getUsername().equalsIgnoreCase(username)
-                        && loggingUser.getPassword().equals(password))
-                .findAny()
-                .map(loggingUser -> "redirect:/index")
-                .orElse("redirect:/errorLogin");
-
-        return url;
-    }
-
 }
