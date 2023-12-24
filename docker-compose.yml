@@ -1,23 +1,31 @@
+version: '3.8'
 services:
   mongodb:
-  image: mongod
-  container_name: mongo_db
-  ports: 
-    -27817:27817
-  volumes:
-     - mongo:/data
-  environment:
-     - MONGO_INITDB_ROOT_USERNAME=root 
-     - MONGO_INITDB_ROOT_PASSWORD=password123*
+    image: mongo
+    container_name: mongo_db
+    ports:
+      - "27017:27017" # Correct the port syntax
+    volumes:
+      - mongo:/data:rw
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+
   mongo-express:
-   image: mongo-express
-   container_name: mongo_express
-   restart: always
-   ports: 
-     - 80801:8081
-   environment:
-      -ME_CONFIG-MONGODB_ADMINUSERNAME=root
-      -ME_CONFIG-MONGODB_ADMINPASSWORD=password123*
-      -ME_CONFIG-MONGODB_SERVER=mongodb
-   volumes:
-    mongo: {}
+    image: mongo-express
+    container_name: mongo_express
+    restart: always
+    ports:
+      - "8081:8081" # Correct the port syntax
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: newadmin # Correct the environment variable names
+      ME_CONFIG_MONGODB_ADMINPASSWORD: newadmin
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    volumes:
+      - mongo:/data:rw # You can share the volume with the mongodb service
+
+volumes:
+  mongo: {} 
+
+  # docker-compose down
+# docker-compose up -d
